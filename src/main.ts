@@ -1,18 +1,18 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core'
 import {
   FastifyAdapter,
   NestFastifyApplication,
-} from '@nestjs/platform-fastify';
-import { AppModule } from './app.module';
+} from '@nestjs/platform-fastify'
+import { AppModule } from './app.module'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
-  );
-  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+  )
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0')
 }
-bootstrap().catch((err) => {
-  console.error('Error during application bootstrap:', err);
-  process.exit(1);
-});
+bootstrap().catch(err => {
+  console.error('Error during application bootstrap:', err)
+  process.exit(1)
+})
