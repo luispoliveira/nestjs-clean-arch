@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { EnvConfigService } from './env-config.service'
 
 @Module({
+  imports: [ConfigModule],
   providers: [EnvConfigService],
   exports: [EnvConfigService],
 })
