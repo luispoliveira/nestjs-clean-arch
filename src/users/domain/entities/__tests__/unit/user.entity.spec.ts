@@ -39,4 +39,28 @@ describe('User Entity unit tests', () => {
     expect(sut.createdAt).toBeDefined()
     expect(sut.createdAt).toBeInstanceOf(Date)
   })
+
+  it('Setter of name field', () => {
+    const newName = 'New Name'
+    sut['name'] = newName
+    expect(sut.name).toBe(newName)
+  })
+
+  it('Setter of password field', () => {
+    const newPassword = 'New Password'
+    sut['password'] = newPassword
+    expect(sut.password).toBe(newPassword)
+  })
+
+  it('should update a user', () => {
+    const newName = 'Updated Name'
+    sut.update(newName)
+    expect(sut.name).toBe(newName)
+  })
+
+  it('should update a user password', () => {
+    const newPassword = 'Updated Password'
+    sut.updatePassword(newPassword)
+    expect(sut.password).toBe(newPassword)
+  })
 })
