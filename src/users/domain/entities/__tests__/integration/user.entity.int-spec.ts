@@ -63,4 +63,54 @@ describe('User Entity integration tests', () => {
       new UserEntity(props)
     })
   })
+
+  describe('Update method', () => {
+    it('should throw an error when updating a user with invalid name', () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      expect(() => entity.update(null as any)).toThrow(EntityValidationError)
+      expect(() => entity.update('')).toThrow(EntityValidationError)
+      expect(() => entity.update('a'.repeat(256))).toThrow(
+        EntityValidationError,
+      )
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      expect(() => entity.update(10 as any)).toThrow(EntityValidationError)
+    })
+
+    it('should update user with valid name', () => {
+      expect.assertions(0)
+      const entity = new UserEntity(UserDataBuilder({}))
+
+      const newName = 'New Name'
+      entity.update(newName)
+    })
+  })
+
+  describe('UpdatePassword method', () => {
+    it('should throw an error when updating a user with invalid password', () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      expect(() => entity.updatePassword(null as any)).toThrow(
+        EntityValidationError,
+      )
+      expect(() => entity.updatePassword('')).toThrow(EntityValidationError)
+      expect(() => entity.updatePassword('a'.repeat(256))).toThrow(
+        EntityValidationError,
+      )
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      expect(() => entity.updatePassword(10 as any)).toThrow(
+        EntityValidationError,
+      )
+    })
+
+    it('should update user with valid password', () => {
+      expect.assertions(0)
+      const entity = new UserEntity(UserDataBuilder({}))
+
+      const newPassword = 'NewPassword123'
+      entity.updatePassword(newPassword)
+    })
+  })
 })
