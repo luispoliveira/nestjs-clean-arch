@@ -1,4 +1,7 @@
-import { SearchParams } from '../../searchable-repository-contracts'
+import {
+  SearchParams,
+  SearchResult,
+} from '../../searchable-repository-contracts'
 
 describe('SearchableRepositoryContracts unit tests', () => {
   describe('SearchParams tests', () => {
@@ -151,6 +154,48 @@ describe('SearchableRepositoryContracts unit tests', () => {
         const searchParams = new SearchParams({ filter: param.filter as any })
         expect(searchParams.filter).toBe(param.expected)
       }
+    })
+  })
+
+  describe('SearchResult tests', () => {
+    it('constructor', () => {
+      const items = [{ id: '1' }, { id: '2' }]
+      const total = 2
+      const currentPage = 1
+      const perPage = 10
+      const sort = 'name'
+      const sortDirection = 'asc'
+      const filter = 'active'
+
+      const searchResult = new SearchResult({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        items: items as any,
+        total,
+        currentPage,
+        perPage,
+        sort,
+        sortDirection,
+        filter,
+      })
+
+      expect(searchResult.items).toEqual(items)
+      expect(searchResult.total).toBe(total)
+      expect(searchResult.currentPage).toBe(currentPage)
+      expect(searchResult.perPage).toBe(perPage)
+      expect(searchResult.sort).toBe(sort)
+      expect(searchResult.sortDirection).toBe(sortDirection)
+      expect(searchResult.filter).toBe(filter)
+      expect(searchResult.lastPage).toBe(1)
+      expect(searchResult.toJSON()).toStrictEqual({
+        items,
+        total,
+        currentPage,
+        perPage,
+        lastPage: 1,
+        sort,
+        sortDirection,
+        filter,
+      })
     })
   })
 })
