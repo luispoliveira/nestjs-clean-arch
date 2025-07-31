@@ -2,12 +2,23 @@ import { Entity } from '../entities/entity'
 import { RepositoryInterface } from './repository-contracts'
 
 export type SortDirection = 'asc' | 'desc'
+
 export type SearchProps<Filter = string> = {
   page?: number
   perPage?: number
   sort?: string
   sortDirection?: SortDirection | null
   filter?: Filter | null
+}
+
+export type SearchResultProps<E extends Entity, Filter> = {
+  items: E[]
+  total: number
+  currentPage: number
+  perPage: number
+  sort: string | null
+  sortDirection: SortDirection | null
+  filter: Filter | null
 }
 
 export class SearchParams {
@@ -98,9 +109,44 @@ export class SearchParams {
   }
 }
 
+export class SearchResult<E extends Entity, Filter = string> {
+  readonly items: E[]
+  readonly total: number
+  readonly currentPage: number
+  readonly perPage: number
+  readonly lastPage: number
+  readonly sort: string | null
+  readonly sortDirection: SortDirection | null
+  readonly filter: Filter | null
+
+  constructor(props: SearchResultProps<E, Filter>) {
+    this.items = props.items
+    this.total = props.total
+    this.currentPage = props.currentPage
+    this.perPage = props.perPage
+    this.lastPage = Math.ceil(this.total / this.perPage)
+    this.sort = props.sort ?? null
+    this.sortDirection = props.sortDirection ?? null
+    this.filter = props.filter ?? null
+  }
+
+  toJSON(forceEntity = false) {
+    return {
+      items: forceEntity ? this.items.map(item => item.toJSON()) : this.items,
+      total: this.total,
+      currentPage: this.currentPage,
+      perPage: this.perPage,
+      lastPage: this.lastPage,
+      sort: this.sort,
+      sortDirection: this.sortDirection,
+      filter: this.filter,
+    }
+  }
+}
+
 export interface SearchableRepositoryInterface<
   E extends Entity,
-  SearchInput,
+  SearchParams,
   SearchOutput,
 > extends RepositoryInterface<E> {
   search(input: SearchParams): Promise<SearchOutput>
