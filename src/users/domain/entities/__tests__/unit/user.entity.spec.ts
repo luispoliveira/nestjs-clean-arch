@@ -5,11 +5,13 @@ describe('User Entity unit tests', () => {
   let props: UserProps
   let sut: UserEntity
   beforeEach(() => {
+    UserEntity.validate = jest.fn()
     props = UserDataBuilder({})
-
     sut = new UserEntity(props)
   })
   it('Constructed method', () => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(UserEntity.validate).toHaveBeenCalled()
     expect(sut.props.name).toBe(props.name)
     expect(sut.props.email).toBe(props.email)
     expect(sut.props.password).toBe(props.password)
@@ -53,12 +55,16 @@ describe('User Entity unit tests', () => {
   })
 
   it('should update a user', () => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(UserEntity.validate).toHaveBeenCalled()
     const newName = 'Updated Name'
     sut.update(newName)
     expect(sut.name).toBe(newName)
   })
 
   it('should update a user password', () => {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(UserEntity.validate).toHaveBeenCalled()
     const newPassword = 'Updated Password'
     sut.updatePassword(newPassword)
     expect(sut.password).toBe(newPassword)

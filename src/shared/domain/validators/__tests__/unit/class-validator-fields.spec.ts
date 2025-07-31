@@ -6,10 +6,10 @@ class StubClassValidatorFields extends ClassValidatorFields<{
 }> {}
 
 describe('ClassValidatorFields unit tests', () => {
-  it('should initialize errors and validatedData as null', () => {
+  it('should initialize errors and validatedData as {}', () => {
     const sut = new StubClassValidatorFields()
-    expect(sut.errors).toBeNull()
-    expect(sut.validatedData).toBeNull()
+    expect(sut.errors).toStrictEqual({})
+    expect(sut.validatedData).toStrictEqual({})
   })
 
   it('should validate with errors', () => {
@@ -27,7 +27,7 @@ describe('ClassValidatorFields unit tests', () => {
     expect(isValid).toBe(false)
     expect(spyValidateSync).toHaveBeenCalledWith(props)
     expect(sut.errors).toStrictEqual({ field: ['test error'] })
-    expect(sut.validatedData).toBeNull()
+    expect(sut.validatedData).toStrictEqual({})
   })
 
   it('should validate without errors', () => {
@@ -39,7 +39,7 @@ describe('ClassValidatorFields unit tests', () => {
 
     expect(isValid).toBeTruthy()
     expect(spyValidateSync).toHaveBeenCalledWith(props)
-    expect(sut.errors).toBeNull()
+    expect(sut.errors).toStrictEqual({})
     expect(sut.validatedData).toStrictEqual(props)
   })
 })

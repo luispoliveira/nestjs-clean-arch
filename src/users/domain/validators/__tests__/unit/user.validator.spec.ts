@@ -17,7 +17,7 @@ describe('UserValidator unit tests', () => {
     const isValid = sut.validate(props)
 
     expect(isValid).toBeTruthy()
-    expect(sut.errors).toBeNull()
+    expect(sut.errors).toStrictEqual({})
     expect(sut.validatedData).toStrictEqual(new UserRules(props))
   })
   describe('Name field', () => {

@@ -38,7 +38,7 @@ describe('ClassValidatorFields integration tests', () => {
         'price must be a number conforming to the specified constraints',
       ],
     })
-    expect(validator.validatedData).toBeNull()
+    expect(validator.validatedData).toStrictEqual({})
   })
 
   it('should validate with valid data', () => {
@@ -53,6 +53,6 @@ describe('ClassValidatorFields integration tests', () => {
       name: 'Valid Name',
       price: 100,
     })
-    expect(validator.errors).toBeNull()
+    expect(validator.errors).toStrictEqual({})
   })
 })
