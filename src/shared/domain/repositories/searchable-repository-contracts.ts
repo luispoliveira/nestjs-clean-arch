@@ -17,12 +17,12 @@ export class SearchParams {
   protected _sortDirection: SortDirection | null
   protected _filter: string | null
 
-  constructor(props: SearchProps) {
-    this._page = props.page ?? 1
-    this._perPage = props.perPage ?? 15
-    this._sort = props.sort ?? null
-    this._sortDirection = props.sortDirection ?? null
-    this._filter = props.filter ?? null
+  constructor(props: SearchProps = {}) {
+    this.page = props.page ?? 1
+    this.perPage = props.perPage ?? 15
+    this.sort = props.sort ?? null
+    this.sortDirection = props.sortDirection ?? null
+    this.filter = props.filter ?? null
   }
 
   get page(): number {
@@ -30,7 +30,8 @@ export class SearchParams {
   }
 
   private set page(value: number) {
-    let _page = +value
+    let _page = value === (true as any) ? 1 : +value
+
     if (
       isNaN(_page) ||
       _page <= 0 ||
@@ -46,7 +47,7 @@ export class SearchParams {
   }
 
   private set perPage(value: number) {
-    let _perPage = +value
+    let _perPage = value === (true as any) ? 15 : +value
     if (
       isNaN(_perPage) ||
       _perPage <= 0 ||
@@ -63,9 +64,12 @@ export class SearchParams {
 
   private set sort(value: string | null) {
     this._sort =
-      value === null || value === undefined || value.trim() === ''
+      value === null ||
+      value === undefined ||
+      value === (true as any) ||
+      value === ''
         ? null
-        : `${value.trim()}`
+        : `${value}`
   }
 
   get sortDirection(): SortDirection | null {
@@ -79,7 +83,7 @@ export class SearchParams {
     }
     const dir = `${value}`.toLowerCase()
     this._sortDirection =
-      dir !== 'asc' && dir !== 'desc' ? null : (dir as SortDirection)
+      dir !== 'asc' && dir !== 'desc' ? 'desc' : (dir as SortDirection)
   }
 
   get filter(): string | null {
@@ -88,9 +92,9 @@ export class SearchParams {
 
   private set filter(value: string | null) {
     this._filter =
-      value === null || value === undefined || value.trim() === ''
+      value === null || value === undefined || value === (true as any)
         ? null
-        : `${value.trim()}`
+        : `${value}`
   }
 }
 
@@ -99,5 +103,5 @@ export interface SearchableRepositoryInterface<
   SearchInput,
   SearchOutput,
 > extends RepositoryInterface<E> {
-  search(input: SearchInput): Promise<SearchOutput>
+  search(input: SearchParams): Promise<SearchOutput>
 }
