@@ -30,7 +30,26 @@ describe('InMemorySearchableRepository unit tests', () => {
     sut = new StubInMemorySearchableRepository()
   })
 
-  describe('applyFilter method', () => {})
+  describe('applyFilter method', () => {
+    it('should return all items if no filter is applied', async () => {
+      const items = [new StubEntity({ name: 'Item 1', price: 10 })]
+      const spyFilterMethod = jest.spyOn(items, 'filter')
+      const result = await sut['applyFilter'](items, null)
+      expect(result).toStrictEqual(items)
+      expect(spyFilterMethod).not.toHaveBeenCalled()
+    })
+
+    it('should return filtered items based on the name', async () => {
+      const items = [
+        new StubEntity({ name: 'Item 1', price: 10 }),
+        new StubEntity({ name: 'Item 2', price: 20 }),
+      ]
+      const spyFilterMethod = jest.spyOn(items, 'filter')
+      const result = await sut['applyFilter'](items, 'Item 1')
+      expect(result).toStrictEqual([items[0]])
+      expect(spyFilterMethod).toHaveBeenCalled()
+    })
+  })
 
   describe('applySort method', () => {})
 
