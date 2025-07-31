@@ -16,12 +16,12 @@ export abstract class InMemorySearchableRepository<E extends Entity>
   async search(input: SearchParams): Promise<SearchResult<E>> {
     const items = await this.findAll()
     const filteredItems = await this.applyFilter(items, input.filter)
-    const sortedItems = await this.applySort(
+    const sortedItems = this.applySort(
       filteredItems,
       input.sort,
       input.sortDirection,
     )
-    const paginatedItems = await this.applyPaginate(
+    const paginatedItems = this.applyPaginate(
       sortedItems,
       input.page,
       input.perPage,
@@ -68,11 +68,11 @@ export abstract class InMemorySearchableRepository<E extends Entity>
     })
   }
 
-  protected async applyPaginate(
+  protected applyPaginate(
     items: E[],
     page: SearchParams['page'],
     perPage: SearchParams['perPage'],
-  ): Promise<E[]> {
+  ): E[] {
     const start = (page - 1) * perPage
     const end = start + perPage
     return items.slice(start, end)
