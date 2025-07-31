@@ -1,0 +1,45 @@
+import { Entity } from '../entities/entity'
+import { NotFoundError } from '../errors/not-found-error'
+import { RepositoryInterface } from './repository-contracts'
+
+export abstract class InMemoryRepository<E extends Entity>
+  implements RepositoryInterface<E>
+{
+  items: E[] = []
+
+  async insert(entity: E): Promise<void> {
+    this.items.push(entity)
+    return Promise.resolve()
+  }
+
+  async findById(id: string): Promise<E> {
+    return await this._get(id)
+  }
+
+  async findAll(): Promise<E[]> {
+    return Promise.resolve(this.items)
+  }
+
+  async update(entity: E): Promise<void> {
+    await this._get(entity.id)
+    const index = this.items.findIndex(item => item.id === entity.id)
+    this.items[index] = entity
+    return Promise.resolve()
+  }
+
+  async delete(id: string): Promise<void> {
+    await this._get(id)
+    const index = this.items.findIndex(item => item.id === id)
+    this.items.splice(index, 1)
+    return Promise.resolve()
+  }
+
+  private async _get(id: string) {
+    const _id = `${id}`
+    const item = this.items.find(item => item.id === _id)
+    if (!item) {
+      return Promise.reject(new NotFoundError('Entity not found'))
+    }
+    return Promise.resolve(item)
+  }
+}
