@@ -22,24 +22,30 @@ export abstract class InMemoryRepository<E extends Entity>
 
   async update(entity: E): Promise<void> {
     await this._get(entity.id)
-    const index = this.items.findIndex(item => item.id === entity.id)
+    const index = await this._getIndex(entity.id)
     this.items[index] = entity
     return Promise.resolve()
   }
 
   async delete(id: string): Promise<void> {
     await this._get(id)
-    const index = this.items.findIndex(item => item.id === id)
+    const index = await this._getIndex(id)
     this.items.splice(index, 1)
     return Promise.resolve()
   }
 
-  private async _get(id: string) {
+  private async _getIndex(id: string): Promise<number> {
     const _id = `${id}`
-    const item = this.items.find(item => item.id === _id)
-    if (!item) {
+    const index = this.items.findIndex(item => item.id === _id)
+    if (index === -1) {
       return Promise.reject(new NotFoundError('Entity not found'))
     }
-    return Promise.resolve(item)
+    return Promise.resolve(index)
+  }
+
+  private async _get(id: string) {
+    const _id = `${id}`
+    const item = await this._getIndex(_id)
+    return Promise.resolve(this.items[item])
   }
 }
