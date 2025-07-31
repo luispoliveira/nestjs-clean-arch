@@ -47,7 +47,7 @@ describe('InMemorySearchableRepository unit tests', () => {
       const spyFilterMethod = jest.spyOn(items, 'filter')
       const result = await sut['applyFilter'](items, 'Item 1')
       expect(result).toStrictEqual([items[0]])
-      expect(spyFilterMethod).toHaveBeenCalled()
+      expect(spyFilterMethod).toHaveBeenCalledTimes(1)
     })
   })
 
