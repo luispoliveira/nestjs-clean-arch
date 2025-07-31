@@ -26,7 +26,7 @@ describe('UserValidator unit tests', () => {
       let isValid = sut.validate(null as any)
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['name']).toStrictEqual([
+      expect(sut.errors['name']).toStrictEqual([
         'name must be shorter than or equal to 255 characters',
         'name must be a string',
         'name should not be empty',
@@ -35,13 +35,13 @@ describe('UserValidator unit tests', () => {
       isValid = sut.validate({ ...UserDataBuilder({}), name: '' })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['name']).toStrictEqual(['name should not be empty'])
+      expect(sut.errors['name']).toStrictEqual(['name should not be empty'])
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       isValid = sut.validate({ ...UserDataBuilder({}), name: 10 as any })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['name']).toStrictEqual([
+      expect(sut.errors['name']).toStrictEqual([
         'name must be shorter than or equal to 255 characters',
         'name must be a string',
       ])
@@ -49,7 +49,7 @@ describe('UserValidator unit tests', () => {
       isValid = sut.validate({ ...UserDataBuilder({}), name: 'a'.repeat(256) })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['name']).toStrictEqual([
+      expect(sut.errors['name']).toStrictEqual([
         'name must be shorter than or equal to 255 characters',
       ])
     })
@@ -61,9 +61,8 @@ describe('UserValidator unit tests', () => {
       let isValid = sut.validate(null as any)
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      console.log("🚀 ~ sut.errors!['email']:", sut.errors!['email'])
 
-      expect(sut.errors!['email']).toStrictEqual([
+      expect(sut.errors['email']).toStrictEqual([
         'email must be an email',
         'email must be a string',
         'email should not be empty',
@@ -72,7 +71,7 @@ describe('UserValidator unit tests', () => {
       isValid = sut.validate({ ...UserDataBuilder({}), email: '' })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['email']).toStrictEqual([
+      expect(sut.errors['email']).toStrictEqual([
         'email must be an email',
         'email should not be empty',
       ])
@@ -81,7 +80,7 @@ describe('UserValidator unit tests', () => {
       isValid = sut.validate({ ...UserDataBuilder({}), email: 10 as any })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['email']).toStrictEqual([
+      expect(sut.errors['email']).toStrictEqual([
         'email must be an email',
         'email must be a string',
       ])
@@ -94,7 +93,7 @@ describe('UserValidator unit tests', () => {
       let isValid = sut.validate(null as any)
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['password']).toStrictEqual([
+      expect(sut.errors['password']).toStrictEqual([
         'password must be shorter than or equal to 100 characters',
         'password must be a string',
         'password should not be empty',
@@ -103,7 +102,7 @@ describe('UserValidator unit tests', () => {
       isValid = sut.validate({ ...UserDataBuilder({}), password: '' })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['password']).toStrictEqual([
+      expect(sut.errors['password']).toStrictEqual([
         'password should not be empty',
       ])
 
@@ -111,7 +110,7 @@ describe('UserValidator unit tests', () => {
       isValid = sut.validate({ ...UserDataBuilder({}), password: 10 as any })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['password']).toStrictEqual([
+      expect(sut.errors['password']).toStrictEqual([
         'password must be shorter than or equal to 100 characters',
         'password must be a string',
       ])
@@ -122,7 +121,7 @@ describe('UserValidator unit tests', () => {
       })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['password']).toStrictEqual([
+      expect(sut.errors['password']).toStrictEqual([
         'password must be shorter than or equal to 100 characters',
       ])
     })
@@ -134,7 +133,7 @@ describe('UserValidator unit tests', () => {
       let isValid = sut.validate({ ...props, createdAt: 10 as any })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['createdAt']).toStrictEqual([
+      expect(sut.errors['createdAt']).toStrictEqual([
         'createdAt must be a Date instance',
       ])
 
@@ -142,7 +141,7 @@ describe('UserValidator unit tests', () => {
       isValid = sut.validate({ ...props, createdAt: '2023' as any })
       expect(isValid).toBeFalsy()
       expect(sut.errors).not.toBeNull()
-      expect(sut.errors!['createdAt']).toStrictEqual([
+      expect(sut.errors['createdAt']).toStrictEqual([
         'createdAt must be a Date instance',
       ])
     })
