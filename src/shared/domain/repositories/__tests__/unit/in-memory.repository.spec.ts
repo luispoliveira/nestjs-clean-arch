@@ -1,4 +1,5 @@
 import { Entity } from '@/shared/domain/entities/entity'
+import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { InMemoryRepository } from '../../in-memory.repository'
 
 type StubEntityProps = {
@@ -30,6 +31,10 @@ describe('InMemoryRepository unit tests', () => {
     expect(foundEntity).toBe(entity)
   })
 
+  it('should throw NotFoundError when finding a non-existing entity', async () => {
+    await expect(sut.findById('non-existing-id')).rejects.toThrow(NotFoundError)
+  })
+
   it('should return all entities', async () => {
     const entity1 = new StubEntity({ name: 'Test1', price: 100 })
     const entity2 = new StubEntity({ name: 'Test2', price: 200 })
@@ -38,5 +43,32 @@ describe('InMemoryRepository unit tests', () => {
     const allEntities = await sut.findAll()
     expect(allEntities).toHaveLength(2)
     expect(allEntities).toEqual([entity1, entity2])
+  })
+
+  it('should update an entity', async () => {
+    const entity = new StubEntity({ name: 'Test', price: 100 })
+    await sut.insert(entity)
+    const updatedEntity = new StubEntity(
+      { name: 'Updated', price: 150 },
+      entity.id,
+    )
+    await sut.update(updatedEntity)
+    expect(sut.items[0]).toEqual(updatedEntity)
+  })
+
+  it('should throw NotFoundError when updating a non-existing entity', async () => {
+    const entity = new StubEntity({ name: 'Test', price: 100 })
+    await expect(sut.update(entity)).rejects.toThrow(NotFoundError)
+  })
+
+  it('should delete an entity', async () => {
+    const entity = new StubEntity({ name: 'Test', price: 100 })
+    await sut.insert(entity)
+    await sut.delete(entity.id)
+    expect(sut.items).toHaveLength(0)
+  })
+
+  it('should throw NotFoundError when deleting a non-existing entity', async () => {
+    await expect(sut.delete('non-existing-id')).rejects.toThrow(NotFoundError)
   })
 })

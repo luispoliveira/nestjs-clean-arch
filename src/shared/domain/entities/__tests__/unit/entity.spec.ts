@@ -27,6 +27,13 @@ describe('Entity unit tests', () => {
     expect(uuidValidate(entity.id)).toBeTruthy()
   })
 
+  it('should get the id', () => {
+    const props: StubProps = { prop1: 'test', prop2: 123 }
+    const id = '123e4567-e89b-12d3-a456-426614174000'
+    const entity = new StubEntity(props, id)
+    expect(entity.id).toBe(id)
+  })
+
   it('should convert a entity to JSON', () => {
     const props: StubProps = { prop1: 'test', prop2: 123 }
     const id = '123e4567-e89b-12d3-a456-426614174000'
