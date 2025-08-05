@@ -16,12 +16,12 @@ export abstract class InMemorySearchableRepository<E extends Entity>
   async search(input: SearchParams): Promise<SearchResult<E>> {
     const items = await this.findAll()
     const filteredItems = await this.applyFilter(items, input.filter)
-    const sortedItems = this.applySort(
+    const sortedItems = await this.applySort(
       filteredItems,
       input.sort,
       input.sortDirection,
     )
-    const paginatedItems = this.applyPaginate(
+    const paginatedItems = await this.applyPaginate(
       sortedItems,
       input.page,
       input.perPage,
@@ -43,38 +43,40 @@ export abstract class InMemorySearchableRepository<E extends Entity>
     filter: string | null,
   ): Promise<E[]>
 
-  protected applySort(
+  protected async applySort(
     items: E[],
     sort: string | null,
     sortDirection: SortDirection | null,
-  ): E[] {
+  ): Promise<E[]> {
     if (!sort || !this.sortableFields.includes(sort)) {
-      return items
+      return Promise.resolve(items)
     }
 
-    return [...items].sort((a, b) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-      const aValue = a.props[sort]
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-      const bValue = b.props[sort]
+    return Promise.resolve(
+      [...items].sort((a, b) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        const aValue = a.props[sort]
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        const bValue = b.props[sort]
 
-      if (aValue < bValue) {
-        return sortDirection === 'asc' ? -1 : 1
-      }
-      if (aValue > bValue) {
-        return sortDirection === 'asc' ? 1 : -1
-      }
-      return 0
-    })
+        if (aValue < bValue) {
+          return sortDirection === 'asc' ? -1 : 1
+        }
+        if (aValue > bValue) {
+          return sortDirection === 'asc' ? 1 : -1
+        }
+        return 0
+      }),
+    )
   }
 
-  protected applyPaginate(
+  protected async applyPaginate(
     items: E[],
     page: SearchParams['page'],
     perPage: SearchParams['perPage'],
-  ): E[] {
+  ): Promise<E[]> {
     const start = (page - 1) * perPage
     const end = start + perPage
-    return items.slice(start, end)
+    return Promise.resolve(items.slice(start, end))
   }
 }

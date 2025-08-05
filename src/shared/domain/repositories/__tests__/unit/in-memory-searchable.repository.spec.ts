@@ -56,33 +56,33 @@ describe('InMemorySearchableRepository unit tests', () => {
   })
 
   describe('applySort method', () => {
-    it('should not sort items', () => {
+    it('should not sort items', async () => {
       const items = [
         new StubEntity({ name: 'Item 1', price: 10 }),
         new StubEntity({ name: 'Item 2', price: 20 }),
       ]
-      let itemSorted = sut['applySort'](items, null, null)
+      let itemSorted = await sut['applySort'](items, null, null)
       expect(itemSorted).toStrictEqual(items)
 
-      itemSorted = sut['applySort'](items, 'nonexistent', null)
+      itemSorted = await sut['applySort'](items, 'nonexistent', null)
       expect(itemSorted).toStrictEqual(items)
     })
 
-    it('should sort items', () => {
+    it('should sort items', async () => {
       const items = [
         new StubEntity({ name: 'Item 1', price: 10 }),
         new StubEntity({ name: 'Item 2', price: 20 }),
       ]
-      let itemSorted = sut['applySort'](items, 'name', 'asc')
+      let itemSorted = await sut['applySort'](items, 'name', 'asc')
       expect(itemSorted).toStrictEqual([items[0], items[1]])
 
-      itemSorted = sut['applySort'](items, 'name', 'desc')
+      itemSorted = await sut['applySort'](items, 'name', 'desc')
       expect(itemSorted).toStrictEqual([items[1], items[0]])
     })
   })
 
   describe('applyPaginate method', () => {
-    it('should paginate items', () => {
+    it('should paginate items', async () => {
       const items = [
         new StubEntity({ name: 'Item 1', price: 10 }),
         new StubEntity({ name: 'Item 2', price: 20 }),
@@ -90,16 +90,16 @@ describe('InMemorySearchableRepository unit tests', () => {
         new StubEntity({ name: 'Item 3', price: 20 }),
         new StubEntity({ name: 'Item 4', price: 20 }),
       ]
-      let paginatedItems = sut['applyPaginate'](items, 1, 2)
+      let paginatedItems = await sut['applyPaginate'](items, 1, 2)
       expect(paginatedItems).toStrictEqual([items[0], items[1]])
 
-      paginatedItems = sut['applyPaginate'](items, 2, 2)
+      paginatedItems = await sut['applyPaginate'](items, 2, 2)
       expect(paginatedItems).toStrictEqual([items[2], items[3]])
 
-      paginatedItems = sut['applyPaginate'](items, 3, 2)
+      paginatedItems = await sut['applyPaginate'](items, 3, 2)
       expect(paginatedItems).toStrictEqual([items[4]])
 
-      paginatedItems = sut['applyPaginate'](items, 4, 2)
+      paginatedItems = await sut['applyPaginate'](items, 4, 2)
       expect(paginatedItems).toStrictEqual([])
     })
   })
