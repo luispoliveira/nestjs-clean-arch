@@ -32,8 +32,32 @@ describe('SignupUseCase unit test', () => {
   })
 
   it('should throw an error if name, email, or password is missing', async () => {
+    let props = UserDataBuilder({ email: '' })
+
     await expect(
-      sut.execute({ name: '', email: '', password: '' }),
+      sut.execute({
+        name: props.name,
+        email: props.email,
+        password: props.password,
+      }),
+    ).rejects.toThrow('Name, email, and password are required.')
+
+    props = UserDataBuilder({ name: '' })
+    await expect(
+      sut.execute({
+        name: props.name,
+        email: props.email,
+        password: props.password,
+      }),
+    ).rejects.toThrow('Name, email, and password are required.')
+
+    props = UserDataBuilder({ password: '' })
+    await expect(
+      sut.execute({
+        name: props.name,
+        email: props.email,
+        password: props.password,
+      }),
     ).rejects.toThrow('Name, email, and password are required.')
   })
 
