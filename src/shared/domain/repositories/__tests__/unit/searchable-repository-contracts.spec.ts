@@ -137,11 +137,11 @@ describe('SearchableRepositoryContracts unit tests', () => {
       expect(sut.filter).toBeNull()
 
       const params = [
-        { filter: '', expected: '' },
+        { filter: '', expected: null },
         { filter: 'name', expected: 'name' },
         { filter: null, expected: null },
         { filter: undefined, expected: null },
-        { filter: true, expected: null },
+        { filter: true, expected: 'true' },
         { filter: {}, expected: '[object Object]' },
         { filter: -1, expected: '-1' },
         { filter: 0, expected: '0' },

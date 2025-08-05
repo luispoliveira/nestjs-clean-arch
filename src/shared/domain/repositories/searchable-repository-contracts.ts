@@ -21,14 +21,14 @@ export type SearchResultProps<E extends Entity, Filter> = {
   filter: Filter | null
 }
 
-export class SearchParams {
+export class SearchParams<Filter = string> {
   protected _page: number
   protected _perPage: number
   protected _sort: string | null
   protected _sortDirection: SortDirection | null
-  protected _filter: string | null
+  protected _filter: Filter | null
 
-  constructor(props: SearchProps = {}) {
+  constructor(props: SearchProps<Filter> = {}) {
     this.page = props.page ?? 1
     this.perPage = props.perPage ?? 15
     this.sort = props.sort ?? null
@@ -97,15 +97,17 @@ export class SearchParams {
       dir !== 'asc' && dir !== 'desc' ? 'desc' : (dir as SortDirection)
   }
 
-  get filter(): string | null {
+  get filter(): Filter | null {
     return this._filter
   }
 
-  private set filter(value: string | null) {
+  private set filter(value: Filter | null) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this._filter =
-      value === null || value === undefined || value === (true as any)
+      value === null || value === undefined || value === ''
         ? null
-        : `${value}`
+        : // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          (`${value}` as any)
   }
 }
 
@@ -147,7 +149,7 @@ export class SearchResult<E extends Entity, Filter = string> {
 export interface SearchableRepositoryInterface<
   E extends Entity,
   Filter = string,
-  SearchInput = SearchParams,
+  SearchInput = SearchParams<Filter>,
   SearchOutput = SearchResult<E, Filter>,
 > extends RepositoryInterface<E> {
   sortableFields: string[]
