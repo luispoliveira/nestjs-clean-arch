@@ -64,4 +64,32 @@ describe('UserInMemoryRepository unit tests', () => {
     expect(spyFilter).toHaveBeenCalled()
     expect(itemsFiltered[0].toJSON()).toStrictEqual(entity1.toJSON())
   })
+
+  it('should sort items by createdAt when no sort is provided', async () => {
+    const entity1 = new UserEntity(
+      UserDataBuilder({ createdAt: new Date(2023, 0, 1) }),
+    )
+    const entity2 = new UserEntity(
+      UserDataBuilder({ createdAt: new Date(2023, 0, 2) }),
+    )
+    await sut.insert(entity1)
+    await sut.insert(entity2)
+
+    const result = await sut.findAll()
+    const sortedItems = await sut['applySort'](result, null, null)
+    expect(sortedItems[0].createdAt).toBe(entity2.createdAt)
+    expect(sortedItems[1].createdAt).toBe(entity1.createdAt)
+  })
+
+  it('should sort items by name when sort is provided', async () => {
+    const entity1 = new UserEntity(UserDataBuilder({ name: 'Bob' }))
+    const entity2 = new UserEntity(UserDataBuilder({ name: 'Alice' }))
+    await sut.insert(entity1)
+    await sut.insert(entity2)
+
+    const result = await sut.findAll()
+    const sortedItems = await sut['applySort'](result, 'name', 'asc')
+    expect(sortedItems[0].name).toBe('Alice')
+    expect(sortedItems[1].name).toBe('Bob')
+  })
 })
