@@ -88,8 +88,12 @@ describe('UserInMemoryRepository unit tests', () => {
     await sut.insert(entity2)
 
     const result = await sut.findAll()
-    const sortedItems = await sut['applySort'](result, 'name', 'asc')
+    let sortedItems = await sut['applySort'](result, 'name', 'asc')
     expect(sortedItems[0].name).toBe('Alice')
     expect(sortedItems[1].name).toBe('Bob')
+
+    sortedItems = await sut['applySort'](result, 'name', null)
+    expect(sortedItems[0].name).toBe('Bob')
+    expect(sortedItems[1].name).toBe('Alice')
   })
 })
