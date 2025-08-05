@@ -27,7 +27,7 @@ export class UserInMemoryRepository
 
   protected applyFilter(
     items: UserEntity[],
-    filter: UserRepository.Filter,
+    filter: UserRepository.Filter | null,
   ): Promise<UserEntity[]> {
     if (!filter) return Promise.resolve(items)
 
