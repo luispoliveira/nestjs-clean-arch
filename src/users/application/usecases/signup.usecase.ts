@@ -1,6 +1,7 @@
 import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
+import { UserOutputDTO } from '../dtos/user-output.dto'
 import { BadRequestError } from '../errors/bad-request-error'
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -11,13 +12,7 @@ export namespace SignupUseCase {
     password: string
   }
 
-  export type Output = {
-    id: string
-    name: string
-    email: string
-    password: string
-    createdAt: Date
-  }
+  export type Output = UserOutputDTO
 
   export class UseCase {
     constructor(
