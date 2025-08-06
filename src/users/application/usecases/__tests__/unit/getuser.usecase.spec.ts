@@ -18,10 +18,13 @@ describe('GetUserUseCase unit test', () => {
   })
 
   it('should return a user when found', async () => {
+    const spyFindById = jest.spyOn(repository, 'findById')
     const user = new UserEntity(UserDataBuilder({}))
     await repository.insert(user)
+
     const result = await sut.execute({ id: user.id })
     expect(result).toStrictEqual(user.toJSON())
+    expect(spyFindById).toHaveBeenCalledTimes(1)
   })
 
   it('should return a user with correct properties', async () => {
