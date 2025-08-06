@@ -24,13 +24,13 @@ describe('SignInUseCase unit test', () => {
     const password = 'password123'
     const hashedPassword = await hasProvider.generateHash(password)
     const userEntity = new UserEntity(
-      UserDataBuilder({ password: hashedPassword }),
+      UserDataBuilder({ email: 'user@example.com', password: hashedPassword }),
     )
 
     repository.items = [userEntity]
 
     const result = await sut.execute({
-      email: userEntity.email,
+      email: 'user@example.com',
       password: password,
     })
 
