@@ -3,7 +3,7 @@ import { UseCase as DefaultUseCase } from '@/shared/application/usecases/use-cas
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
 import { BadRequestError } from '../../../shared/application/errors/bad-request-error'
-import { UserOutputDTO } from '../dtos/user-output.dto'
+import { UserOutputDTO, UserOutputMapper } from '../dtos/user-output.dto'
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace SignupUseCase {
   export type Input = {
@@ -36,7 +36,7 @@ export namespace SignupUseCase {
 
       await this.userRepository.insert(entity)
 
-      return entity.toJSON()
+      return UserOutputMapper.toOutput(entity)
     }
   }
 }

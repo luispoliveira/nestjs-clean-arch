@@ -1,6 +1,6 @@
 import { UseCase as DefaultUseCase } from '@/shared/application/usecases/use-case'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
-import { UserOutputDTO } from '../dtos/user-output.dto'
+import { UserOutputDTO, UserOutputMapper } from '../dtos/user-output.dto'
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace GetUserUseCase {
   export type Input = {
@@ -15,7 +15,7 @@ export namespace GetUserUseCase {
     async execute(input: Input): Promise<Output> {
       const entity = await this.userRepository.findById(input.id)
 
-      return entity.toJSON()
+      return UserOutputMapper.toOutput(entity)
     }
   }
 }
