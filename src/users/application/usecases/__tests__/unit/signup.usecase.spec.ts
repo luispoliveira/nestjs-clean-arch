@@ -1,3 +1,4 @@
+import { BadRequestError } from '@/shared/application/errors/bad-request-error'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { ConflictError } from '@/shared/domain/errors/conflict-error'
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder'
@@ -40,7 +41,7 @@ describe('SignupUseCase unit test', () => {
         email: props.email,
         password: props.password,
       }),
-    ).rejects.toThrow('Name, email, and password are required.')
+    ).rejects.toThrow(BadRequestError)
 
     props = UserDataBuilder({ name: '' })
     await expect(
@@ -49,7 +50,7 @@ describe('SignupUseCase unit test', () => {
         email: props.email,
         password: props.password,
       }),
-    ).rejects.toThrow('Name, email, and password are required.')
+    ).rejects.toThrow(BadRequestError)
 
     props = UserDataBuilder({ password: '' })
     await expect(
@@ -58,7 +59,7 @@ describe('SignupUseCase unit test', () => {
         email: props.email,
         password: props.password,
       }),
-    ).rejects.toThrow('Name, email, and password are required.')
+    ).rejects.toThrow(BadRequestError)
   })
 
   it('should throw an error if email already exists', async () => {
