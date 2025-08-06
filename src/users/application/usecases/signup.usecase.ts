@@ -1,9 +1,9 @@
 import { HashProvider } from '@/shared/application/providers/hash.provider'
+import { UseCase as DefaultUseCase } from '@/shared/application/usecases/use-case'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
 import { UserOutputDTO } from '../dtos/user-output.dto'
 import { BadRequestError } from '../errors/bad-request-error'
-
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace SignupUseCase {
   export type Input = {
@@ -14,7 +14,7 @@ export namespace SignupUseCase {
 
   export type Output = UserOutputDTO
 
-  export class UseCase {
+  export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
       private userRepository: UserRepository.Repository,
       private hashProvider: HashProvider,
