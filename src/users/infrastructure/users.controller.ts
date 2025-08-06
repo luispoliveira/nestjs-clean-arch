@@ -48,41 +48,45 @@ export class UsersController {
   private deleteUserUseCase: DeleteUserUseCase.UseCase
 
   @Post()
-  create(@Body() signUpDto: SignUpDto) {
-    return this.signUpUseCase.execute(signUpDto)
+  async create(@Body() signUpDto: SignUpDto) {
+    return await this.signUpUseCase.execute(signUpDto)
   }
 
   @HttpCode(200)
   @Post('login')
-  signIn(@Body() signInDto: SignInDto) {
-    return this.signInUseCase.execute(signInDto)
+  async signIn(@Body() signInDto: SignInDto) {
+    return await this.signInUseCase.execute(signInDto)
   }
 
   @Get()
-  search(@Query() query: ListUsersDto) {
-    return this.listUsersUseCase.execute(query)
+  async search(@Query() query: ListUsersDto) {
+    return await this.listUsersUseCase.execute(query)
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.getUserUseCase.execute({ id })
+  async findOne(@Param('id') id: string) {
+    return await this.getUserUseCase.execute({ id })
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.updateUserUseCase.execute({ id, ...updateUserDto })
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.updateUserUseCase.execute({ id, ...updateUserDto })
   }
 
   @Patch(':id')
-  updatePassword(
+  async updatePassword(
     @Param('id') id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    return this.updatePasswordUseCase.execute({ id, ...updatePasswordDto })
+    return await this.updatePasswordUseCase.execute({
+      id,
+      ...updatePasswordDto,
+    })
   }
 
+  @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.deleteUserUseCase.execute({ id })
+  async remove(@Param('id') id: string) {
+    await this.deleteUserUseCase.execute({ id })
   }
 }
