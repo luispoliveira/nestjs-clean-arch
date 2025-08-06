@@ -1,6 +1,5 @@
 import { BadRequestError } from '@/shared/application/errors/bad-request-error'
 import { UseCase as DefaultUseCase } from '@/shared/application/usecases/use-case'
-import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
 import { UserOutputDTO, UserOutputMapper } from '../dtos/user-output.dto'
 
@@ -20,7 +19,6 @@ export namespace UpdateUserUseCase {
       if (!input.name) throw new BadRequestError('Name not provided')
 
       const entity = await this.userRepository.findById(input.id)
-      if (!entity) throw new NotFoundError('User not found')
 
       entity.update(input.name)
 
