@@ -4,17 +4,17 @@ import { ConflictError } from '@/shared/domain/errors/conflict-error'
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder'
 import { UserInMemoryRepository } from '@/users/infrastructure/database/in-memory/repositories/user-in-memory.repository'
 import { BcryptjsHashProvider } from '@/users/infrastructure/providers/hash-provider/bcryptjs-hash.provider'
-import { SignupUseCase } from '../../sign-up.usecase'
+import { SignUpUseCase } from '../../sign-up.usecase'
 
 describe('SignupUseCase unit test', () => {
-  let sut: SignupUseCase.UseCase
+  let sut: SignUpUseCase.UseCase
   let repository: UserInMemoryRepository
   let hasProvider: HashProvider
 
   beforeEach(() => {
     repository = new UserInMemoryRepository()
     hasProvider = new BcryptjsHashProvider()
-    sut = new SignupUseCase.UseCase(repository, hasProvider)
+    sut = new SignUpUseCase.UseCase(repository, hasProvider)
   })
 
   it('should sign up a user successfully', async () => {

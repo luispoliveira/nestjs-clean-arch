@@ -18,11 +18,13 @@ describe('DeleteUserUseCase unit test', () => {
   })
 
   it('should delete a user', async () => {
+    const spyDelete = jest.spyOn(repository, 'delete')
     const user = new UserEntity(UserDataBuilder({}))
     await repository.insert(user)
 
     expect(repository.items).toHaveLength(1)
     await sut.execute({ id: user.id })
+    expect(spyDelete).toHaveBeenCalledTimes(1)
     expect(repository.items).toHaveLength(0)
   })
 })

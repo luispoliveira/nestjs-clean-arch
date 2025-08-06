@@ -1,13 +1,12 @@
+import { InvalidCredentials } from '@/shared/application/errors/invalid-credentials-error'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { UseCase as DefaultUseCase } from '@/shared/application/usecases/use-case'
-import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
 import { BadRequestError } from '../../../shared/application/errors/bad-request-error'
 import { UserOutputDTO, UserOutputMapper } from '../dtos/user-output.dto'
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace SignUpUseCase {
+export namespace SignInUseCase {
   export type Input = {
-    name: string
     email: string
     password: string
   }
@@ -21,22 +20,23 @@ export namespace SignUpUseCase {
     ) {}
 
     async execute(input: Input): Promise<Output> {
-      const { name, email, password } = input
+      const { email, password } = input
 
-      if (!name || !email || !password)
-        throw new BadRequestError('Name, email, and password are required.')
+      if (!email || !password)
+        throw new BadRequestError('Email and password are required.')
 
-      await this.userRepository.emailExists(email)
+      const user = await this.userRepository.findByEmail(email)
 
-      const hashedPassword = await this.hashProvider.generateHash(password)
-
-      const entity = new UserEntity(
-        Object.assign(input, { password: hashedPassword }),
+      const isValid = await this.hashProvider.compareHash(
+        password,
+        user.password,
       )
 
-      await this.userRepository.insert(entity)
+      if (!isValid) {
+        throw new InvalidCredentials('Invalid email or password.')
+      }
 
-      return UserOutputMapper.toOutput(entity)
+      return UserOutputMapper.toOutput(user)
     }
   }
 }
