@@ -11,12 +11,10 @@ import { UserRepository } from '../domain/repositories/user.repository'
 import { UserInMemoryRepository } from './database/in-memory/repositories/user-in-memory.repository'
 import { BcryptjsHashProvider } from './providers/hash-provider/bcryptjs-hash.provider'
 import { UsersController } from './users.controller'
-import { UsersService } from './users.service'
 
 @Module({
   controllers: [UsersController],
   providers: [
-    UsersService,
     {
       provide: 'UserRepository',
       useClass: UserInMemoryRepository,
