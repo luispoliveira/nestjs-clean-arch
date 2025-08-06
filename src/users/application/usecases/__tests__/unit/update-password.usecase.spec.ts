@@ -53,11 +53,22 @@ describe('UpdatePasswordUseCase unit test', () => {
 
   it('should update the user password', async () => {
     const hashedPassword = await hashProvider.generateHash('old')
+    const spyUpdate = jest.spyOn(repository, 'update')
     const entity = new UserEntity(UserDataBuilder({ password: hashedPassword }))
     repository.items = [entity]
 
-    await expect(
-      sut.execute({ id: entity.id, oldPassword: 'old', password: 'new' }),
-    ).resolves.not.toThrow()
+    const result = await sut.execute({
+      id: entity.id,
+      oldPassword: 'old',
+      password: 'new',
+    })
+
+    const checkNewPassword = await hashProvider.compareHash(
+      'new',
+      result.password,
+    )
+
+    expect(spyUpdate).toHaveBeenCalledTimes(1)
+    expect(checkNewPassword).toBeTruthy()
   })
 })
