@@ -1,4 +1,0 @@
-{
-  "jestrunner.jestCommand": "npx dotenv-cli -e .env.test.local -- jest",
-  "jestrunner.codeLensSelector": "**/*.{test,spec,int-spec,e2e-spec}.{js,jsx,ts,tsx}",
-}
