@@ -23,6 +23,20 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+  },
+  "include": [
+    "src/**/*.ts",
+    "prisma/**/*.prisma"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "generated",
+    "coverage",
+    "test",
+    "tests",
+    "e2e",
+    "scripts"
+  ]
 }

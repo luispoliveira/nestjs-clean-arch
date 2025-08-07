@@ -67,8 +67,5 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
-  },
-  "prisma": {
-    "schema": "src/shared/infrastructure/database/prisma/schema.prisma"
   }
 }
