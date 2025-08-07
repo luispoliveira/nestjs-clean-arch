@@ -11,9 +11,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "allowJs": true,
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@generated/*": [
+        "./generated/*"
       ]
     },
     "incremental": true,
@@ -23,11 +27,13 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*.ts",
-    "prisma/**/*.prisma"
+    "prisma/**/*.prisma",
+    "jest.config.js",
+    "jest.int.config.js"
   ],
   "exclude": [
     "node_modules",

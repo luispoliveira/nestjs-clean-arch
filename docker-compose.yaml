@@ -11,3 +11,15 @@ services:
       POSTGRES_DB: mydb
     volumes:
       - ./.docker/dbdata:/var/lib/postgresql/data
+  db-test:
+    image: postgres:latest
+    restart: always
+    tty: true
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - ./.docker/dbdata-test:/var/lib/postgresql/data

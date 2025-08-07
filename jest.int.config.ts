@@ -6,7 +6,7 @@ export default {
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
-  testRegex: '.*\\.(spec)\\.ts$',
+  testRegex: '.*\\.(int-spec)\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
