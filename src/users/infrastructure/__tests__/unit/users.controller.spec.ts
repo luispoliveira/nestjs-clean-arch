@@ -2,7 +2,10 @@ import { UserOutputDTO } from '@/users/application/dtos/user-output.dto'
 import { SignInUseCase } from '@/users/application/usecases/sign-in.usecase'
 import { SignUpUseCase } from '@/users/application/usecases/sign-up.usecase'
 import { v4 as uuidv4 } from 'uuid'
+import { SignInDto } from '../../dtos/sign-in.dto'
+import { SignUpDto } from '../../dtos/sign-up.dto'
 import { UpdatePasswordDto } from '../../dtos/update-password.dto'
+import { UpdateUserDto } from '../../dtos/update-user.dto'
 import { UsersController } from '../../users.controller'
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -33,7 +36,7 @@ describe('UsersController unit tests', () => {
 
     sut['signUpUseCase'] = mockSignUpUseCase as any
 
-    const input: SignUpUseCase.Input = {
+    const input: SignUpDto = {
       name: props.name,
       email: props.email,
       password: props.password,
@@ -51,7 +54,7 @@ describe('UsersController unit tests', () => {
 
     sut['signInUseCase'] = mockSignInUseCase as any
 
-    const input: SignInUseCase.Input = {
+    const input: SignInDto = {
       email: props.email,
       password: props.password,
     }
@@ -67,10 +70,8 @@ describe('UsersController unit tests', () => {
 
     sut['updateUserUseCase'] = mockUpdateUserUseCase as any
 
-    const updateUserDto = {
+    const updateUserDto: UpdateUserDto = {
       name: 'Jane Doe',
-      email: 'jane.doe@example.com',
-      password: 'newpassword123',
     }
 
     const result = await sut.update(id, updateUserDto)
