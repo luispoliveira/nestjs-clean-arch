@@ -1,7 +1,9 @@
 import { UserOutputDTO } from '@/users/application/dtos/user-output.dto'
+import { ListUsersUseCase } from '@/users/application/usecases/list-users.usecase'
 import { SignInUseCase } from '@/users/application/usecases/sign-in.usecase'
 import { SignUpUseCase } from '@/users/application/usecases/sign-up.usecase'
 import { v4 as uuidv4 } from 'uuid'
+import { ListUsersDto } from '../../dtos/list-users.dto'
 import { SignInDto } from '../../dtos/sign-in.dto'
 import { SignUpDto } from '../../dtos/sign-up.dto'
 import { UpdatePasswordDto } from '../../dtos/update-password.dto'
@@ -127,14 +129,29 @@ describe('UsersController unit tests', () => {
   })
 
   it('should search users', async () => {
+    const output: ListUsersUseCase.Output = {
+      items: [props],
+      total: 1,
+      currentPage: 1,
+      lastPage: 1,
+      perPage: 10,
+    }
     const mockListUsersUseCase = {
-      execute: jest.fn().mockResolvedValue([props]),
+      execute: jest.fn().mockResolvedValue(output),
+    }
+
+    const searchParams: ListUsersDto = {
+      page: 1,
+      perPage: 10,
+      sort: 'name',
+      sortDirection: 'asc',
+      filter: '',
     }
 
     sut['listUsersUseCase'] = mockListUsersUseCase as any
 
-    const result = await sut.search({})
-    expect(result).toStrictEqual([props])
-    expect(mockListUsersUseCase.execute).toHaveBeenCalledWith({})
+    const result = await sut.search(searchParams)
+    expect(result).toStrictEqual(output)
+    expect(mockListUsersUseCase.execute).toHaveBeenCalledWith(searchParams)
   })
 })
