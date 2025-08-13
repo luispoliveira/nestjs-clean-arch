@@ -55,4 +55,19 @@ describe('UserPrismaRepository Integration Tests', () => {
     expect(user).toBeDefined()
     expect(user.id).toEqual(entity.id)
   })
+
+  describe('findAll', () => {
+    it('should return an array of users', async () => {
+      let users = await sut.findAll()
+      expect(users).toHaveLength(0)
+
+      const entity = new UserEntity(UserDataBuilder({}))
+      await sut.insert(entity)
+
+      users = await sut.findAll()
+      expect(users).toHaveLength(1)
+      expect(users[0]).toBeInstanceOf(UserEntity)
+      expect(users[0].toJSON()).toStrictEqual(entity.toJSON())
+    })
+  })
 })
