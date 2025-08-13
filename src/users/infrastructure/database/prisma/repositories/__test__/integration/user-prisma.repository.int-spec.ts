@@ -155,4 +155,25 @@ describe('UserPrismaRepository Integration Tests', () => {
       )
     })
   })
+
+  describe('update method tests', () => {
+    it('should update an existing user', async () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+      await sut.insert(entity)
+
+      entity.update('Updated Name')
+
+      await sut.update(entity)
+
+      const user = await prismaService.user.findUniqueOrThrow({
+        where: { id: entity.id },
+      })
+      expect(user.name).toBe('Updated Name')
+    })
+
+    it('should throw error when trying to update a non-existing user', async () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+      await expect(() => sut.update(entity)).rejects.toThrow(NotFoundError)
+    })
+  })
 })

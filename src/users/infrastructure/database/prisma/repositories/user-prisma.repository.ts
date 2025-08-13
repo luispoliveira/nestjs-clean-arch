@@ -9,7 +9,7 @@ export class UserPrismaRepository implements UserRepository.Repository {
 
   constructor(private prismaService: PrismaService) {}
 
-  findByEmail(email: string): Promise<UserEntity> {
+  async findByEmail(email: string): Promise<UserEntity> {
     throw new Error('Method not implemented.')
   }
   emailExists(email: string): Promise<void> {
@@ -82,12 +82,23 @@ export class UserPrismaRepository implements UserRepository.Repository {
     return models.map(model => UserModelMapper.toEntity(model))
   }
 
-  update(entity: UserEntity): Promise<void> {
-    throw new Error('Method not implemented.')
+  async update(entity: UserEntity): Promise<void> {
+    await this._get(entity.id) // Ensure
+
+    await this.prismaService.user.update({
+      where: { id: entity.id },
+      data: {
+        ...entity.toJSON(),
+      },
+    })
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(id: string): Promise<void> {
+    await this._get(id) // Ensure
+
+    await this.prismaService.user.delete({
+      where: { id },
+    })
   }
 
   protected async _get(id: string): Promise<UserEntity> {
