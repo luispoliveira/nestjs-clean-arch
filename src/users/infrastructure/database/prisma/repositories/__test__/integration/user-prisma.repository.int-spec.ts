@@ -176,4 +176,24 @@ describe('UserPrismaRepository Integration Tests', () => {
       await expect(() => sut.update(entity)).rejects.toThrow(NotFoundError)
     })
   })
+
+  describe('delete method tests', () => {
+    it('should delete an existing user', async () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+      await sut.insert(entity)
+
+      await sut.delete(entity.id)
+
+      const user = await prismaService.user.findUnique({
+        where: { id: entity.id },
+      })
+      expect(user).toBeNull()
+    })
+
+    it('should throw error when trying to delete a non-existing user', async () => {
+      await expect(() => sut.delete('non-existing-id')).rejects.toThrow(
+        NotFoundError,
+      )
+    })
+  })
 })
