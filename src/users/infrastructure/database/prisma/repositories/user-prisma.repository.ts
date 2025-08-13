@@ -45,13 +45,12 @@ export class UserPrismaRepository implements UserRepository.Repository {
             mode: 'insensitive',
           },
         },
-        orderBy: {
-          [orderByField]: orderByDir,
-        },
-        skip:
-          input.page && input.page > 0 ? (input.page - 1) * input.perPage : 0,
-        take: input.perPage && input.perPage > 0 ? input.perPage : 15,
       }),
+      orderBy: {
+        [orderByField]: orderByDir,
+      },
+      skip: input.page && input.page > 0 ? (input.page - 1) * input.perPage : 0,
+      take: input.perPage && input.perPage > 0 ? input.perPage : 15,
     })
 
     return new UserRepository.SearchResult({
