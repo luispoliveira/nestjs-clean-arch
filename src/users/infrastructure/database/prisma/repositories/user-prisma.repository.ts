@@ -1,3 +1,4 @@
+import { ConflictError } from '@/shared/domain/errors/conflict-error'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
 import { UserEntity } from '@/users/domain/entities/user.entity'
@@ -10,11 +11,24 @@ export class UserPrismaRepository implements UserRepository.Repository {
   constructor(private prismaService: PrismaService) {}
 
   async findByEmail(email: string): Promise<UserEntity> {
-    throw new Error('Method not implemented.')
+    const model = await this.prismaService.user.findUnique({
+      where: { email },
+    })
+    if (!model) {
+      throw new NotFoundError(`User with email ${email} not found`)
+    }
+    return UserModelMapper.toEntity(model)
   }
-  emailExists(email: string): Promise<void> {
-    throw new Error('Method not implemented.')
+
+  async emailExists(email: string): Promise<void> {
+    const model = await this.prismaService.user.findUnique({
+      where: { email },
+    })
+
+    if (model)
+      throw new ConflictError(`User with email ${email} already exists`)
   }
+
   async search(
     input: UserRepository.SearchParams,
   ): Promise<UserRepository.SearchResult> {

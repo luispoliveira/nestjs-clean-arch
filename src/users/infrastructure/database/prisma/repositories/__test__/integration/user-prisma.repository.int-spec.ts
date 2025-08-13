@@ -1,3 +1,4 @@
+import { ConflictError } from '@/shared/domain/errors/conflict-error'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { DatabaseModule } from '@/shared/infrastructure/database/database.module'
 import { setupPrismaTests } from '@/shared/infrastructure/database/prisma/testing/setup-prisma-tests'
@@ -194,6 +195,44 @@ describe('UserPrismaRepository Integration Tests', () => {
       await expect(() => sut.delete('non-existing-id')).rejects.toThrow(
         NotFoundError,
       )
+    })
+  })
+
+  describe('emailExists method tests', () => {
+    it('should not throw error if email does not exist', () => {
+      expect(
+        async () => await sut.emailExists('non-existing-email@mail.com'),
+      ).not.toThrow()
+    })
+
+    it('should throw error if email already exists', async () => {
+      const entity = new UserEntity(
+        UserDataBuilder({ email: 'existing-email@mail.com' }),
+      )
+      await sut.insert(entity)
+
+      await expect(() =>
+        sut.emailExists('existing-email@mail.com'),
+      ).rejects.toThrow(ConflictError)
+    })
+  })
+
+  describe('findByEmail method tests', () => {
+    it('should return a user if email exists', async () => {
+      const entity = new UserEntity(
+        UserDataBuilder({ email: 'existing-email@mail.com' }),
+      )
+      await sut.insert(entity)
+
+      const user = await sut.findByEmail('existing-email@mail.com')
+      expect(user).toBeInstanceOf(UserEntity)
+      expect(user.email).toBe('existing-email@mail.com')
+    })
+
+    it('should throw error if email does not exist', async () => {
+      await expect(
+        async () => await sut.findByEmail('non-existing-email@mail.com'),
+      ).rejects.toThrow(NotFoundError)
     })
   })
 })
