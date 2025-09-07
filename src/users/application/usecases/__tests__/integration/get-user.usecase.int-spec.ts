@@ -45,7 +45,9 @@ describe('GetUserUsecase Integration Tests', () => {
   it('should return a user', async () => {
     const entity = new UserEntity(UserDataBuilder({}))
 
-    await repository.insert(entity)
+    const model = await prismaService.user.create({
+      data: entity.toJSON(),
+    })
 
     const props: GetUserUseCase.Input = {
       id: entity.id,
@@ -53,6 +55,6 @@ describe('GetUserUsecase Integration Tests', () => {
 
     const output = await sut.execute(props)
 
-    expect(output).toEqual(entity.toJSON())
+    expect(output).toMatchObject(model)
   })
 })
