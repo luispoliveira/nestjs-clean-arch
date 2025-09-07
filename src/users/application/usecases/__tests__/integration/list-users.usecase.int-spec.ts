@@ -74,4 +74,40 @@ describe('ListUsersUsecase Integration Tests', () => {
       lastPage: 1,
     })
   })
+
+  it('should return output using fitler, orderby and pagination', async () => {
+    const createdAt = new Date()
+    const entities: UserEntity[] = []
+
+    const arrange = ['test', 'a', 'TEST', 'b', 'TeSt']
+
+    arrange.forEach((element, index) => {
+      entities.push(
+        new UserEntity({
+          ...UserDataBuilder({ name: element }),
+          createdAt: new Date(createdAt.getTime() + index),
+        }),
+      )
+    })
+
+    await prismaService.user.createMany({
+      data: entities.map(i => i.toJSON()),
+    })
+
+    const output = await sut.execute({
+      filter: 'TEST',
+      sort: 'name',
+      sortDirection: 'asc',
+      page: 1,
+      perPage: 2,
+    })
+
+    expect(output).toMatchObject({
+      items: [entities[0].toJSON(), entities[4].toJSON()],
+      total: 3,
+      currentPage: 1,
+      perPage: 2,
+      lastPage: 2,
+    })
+  })
 })
