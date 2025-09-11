@@ -8,6 +8,7 @@ import { SignInDto } from '../../dtos/sign-in.dto'
 import { SignUpDto } from '../../dtos/sign-up.dto'
 import { UpdatePasswordDto } from '../../dtos/update-password.dto'
 import { UpdateUserDto } from '../../dtos/update-user.dto'
+import { UserCollectionPresenter } from '../../presenters/user-collection.presenter'
 import { UserPresenter } from '../../presenters/user.presenter'
 import { UsersController } from '../../users.controller'
 describe('UsersController unit tests', () => {
@@ -156,8 +157,9 @@ describe('UsersController unit tests', () => {
 
     sut['listUsersUseCase'] = mockListUsersUseCase as any
 
-    const result = await sut.search(searchParams)
-    expect(result).toStrictEqual(output)
+    const presenter = await sut.search(searchParams)
+    expect(presenter).toBeInstanceOf(UserCollectionPresenter)
+    expect(presenter).toStrictEqual(new UserCollectionPresenter(output))
     expect(mockListUsersUseCase.execute).toHaveBeenCalledWith(searchParams)
   })
 })
