@@ -6,7 +6,7 @@ export type PaginationPresenterProps = {
   lastPage: number
   total: number
 }
-export class PaginatioPresenter {
+export class PaginationPresenter {
   @Transform(({ value }) => parseInt(value))
   currentPage: number
   @Transform(({ value }) => parseInt(value))
