@@ -18,7 +18,7 @@
     "test:watch": "npx dotenv-cli -e .env.test.local -- jest --watch",
     "test:cov": "npx dotenv-cli -e .env.test.local -- jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "npx dotenv-cli -e .env.test.local -- jest --config ./test/jest-e2e.json",
+    "test:e2e": "npx dotenv-cli -e .env.test.local -- jest --runInBand --config ./jest.e2e.config.ts",
     "prisma:generate": "npx dotenv-cli -e .env.development.local -- prisma generate",
     "prisma:migrate:dev": "npx dotenv-cli -e .env.development.local -- prisma migrate dev",
     "prisma:migrate:deploy": "npx dotenv-cli -e .env.development.local -- prisma migrate deploy"
