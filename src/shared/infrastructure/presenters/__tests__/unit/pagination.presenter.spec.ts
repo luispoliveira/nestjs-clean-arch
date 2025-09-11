@@ -1,3 +1,4 @@
+import { instanceToPlain } from 'class-transformer'
 import {
   PaginationPresenter,
   PaginationPresenterProps,
@@ -6,10 +7,10 @@ import {
 describe('Pagination presenter unit test', () => {
   let sut: PaginationPresenter
   const props: PaginationPresenterProps = {
-    currentPage: 1,
-    perPage: 10,
-    lastPage: 5,
-    total: 50,
+    currentPage: '1' as any,
+    perPage: '10' as any,
+    lastPage: '5' as any,
+    total: '50' as any,
   }
   beforeEach(() => {
     sut = new PaginationPresenter(props)
@@ -28,9 +29,12 @@ describe('Pagination presenter unit test', () => {
   })
 
   it('should transform properties to integers', () => {
-    expect(typeof sut.currentPage).toBe('number')
-    expect(typeof sut.perPage).toBe('number')
-    expect(typeof sut.lastPage).toBe('number')
-    expect(typeof sut.total).toBe('number')
+    const output = instanceToPlain(sut)
+    expect(output).toStrictEqual({
+      currentPage: 1,
+      perPage: 10,
+      lastPage: 5,
+      total: 50,
+    })
   })
 })
