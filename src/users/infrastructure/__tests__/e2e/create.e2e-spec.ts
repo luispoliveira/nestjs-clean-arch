@@ -43,23 +43,18 @@ describe('UsersController e2e tests', () => {
 
   describe('POST /users', () => {
     it('should create a user', async () => {
-      await request(app.getHttpServer())
+      const res = await request(app.getHttpServer())
         .post('/users')
         .send(signUpDto)
         .expect(201)
-        .then(async response => {
-          const { body } = response
-          expect(body).toHaveProperty('id')
-          expect(body).toHaveProperty('email', signUpDto.email)
-          expect(body).toHaveProperty('name', signUpDto.name)
-          expect(body).not.toHaveProperty('password')
 
-          const userInDb = await repository.findById(body.id)
-          expect(userInDb).not.toBeNull()
-          expect(userInDb?.email).toBe(signUpDto.email)
-          expect(userInDb?.name).toBe(signUpDto.name)
-          expect(userInDb?.password).not.toBe(signUpDto.password) // Password should be hashed
-        })
+      expect(Object.keys(res.body)).toEqual(['data'])
+
+      const userInDb = await repository.findById(res.body.data.id)
+      expect(userInDb).not.toBeNull()
+      expect(userInDb?.email).toBe(signUpDto.email)
+      expect(userInDb?.name).toBe(signUpDto.name)
+      expect(userInDb?.password).not.toBe(signUpDto.password) // Password should be hashed
     })
   })
 })
