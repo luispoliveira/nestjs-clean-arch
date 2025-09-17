@@ -56,5 +56,23 @@ describe('UsersController e2e tests', () => {
       expect(userInDb?.name).toBe(signUpDto.name)
       expect(userInDb?.password).not.toBe(signUpDto.password) // Password should be hashed
     })
+
+    it('should return a error with 422 code when the request is invalid', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send({})
+        .expect(422)
+
+      expect(res.body.error).toBe('Unprocessable Entity')
+      expect(res.body.message).toEqual([
+        'name should not be empty',
+        'name must be a string',
+        'email must be an email',
+        'email should not be empty',
+        'email must be a string',
+        'password should not be empty',
+        'password must be a string',
+      ])
+    })
   })
 })
