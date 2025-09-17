@@ -74,5 +74,48 @@ describe('UsersController e2e tests', () => {
         'password must be a string',
       ])
     })
+
+    it('should return a error with 422 code when the name field is invalid', async () => {
+      const { name, ...signUpDtoWithoutName } = signUpDto
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send({ ...signUpDtoWithoutName })
+        .expect(422)
+
+      expect(res.body.error).toBe('Unprocessable Entity')
+      expect(res.body.message).toEqual([
+        'name should not be empty',
+        'name must be a string',
+      ])
+    })
+
+    it('should return a error with 422 code when the email field is invalid', async () => {
+      const { email, ...signUpDtoWithoutEmail } = signUpDto
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send({ ...signUpDtoWithoutEmail })
+        .expect(422)
+
+      expect(res.body.error).toBe('Unprocessable Entity')
+      expect(res.body.message).toEqual([
+        'email must be an email',
+        'email should not be empty',
+        'email must be a string',
+      ])
+    })
+
+    it('should return a error with 422 code when the password field is invalid', async () => {
+      const { password, ...signUpDtoWithoutPassword } = signUpDto
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send({ ...signUpDtoWithoutPassword })
+        .expect(422)
+
+      expect(res.body.error).toBe('Unprocessable Entity')
+      expect(res.body.message).toEqual([
+        'password should not be empty',
+        'password must be a string',
+      ])
+    })
   })
 })
