@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { applyGlobalConfig } from '@/global-config'
 import { DatabaseModule } from '@/shared/infrastructure/database/database.module'
