@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { applyGlobalConfig } from '@/global-config'
 import { DatabaseModule } from '@/shared/infrastructure/database/database.module'
@@ -76,19 +77,17 @@ describe('UsersController e2e tests', () => {
       ])
     })
 
-    // it('should return a error with 422 code when the name field is invalid', async () => {
-    //   const { name, ...signUpDtoWithoutName } = signUpDto
-    //   const res = await request(app.getHttpServer())
-    //     .post('/users')
-    //     .send({ ...signUpDtoWithoutName })
-    //     .expect(422)
-
-    //   expect(res.body.error).toBe('Unprocessable Entity')
-    //   expect(res.body.message).toEqual([
-    //     'name should not be empty',
-    //     'name must be a string',
-    //   ])
-    // })
+    it('should return a error with 404 code when the user is not found', async () => {
+      await request(app.getHttpServer())
+        .put(`/users/fakeId`)
+        .send(updateUserDto)
+        .expect(404)
+        .expect({
+          statusCode: 404,
+          error: 'Not Found',
+          message: 'User with id fakeId not found',
+        })
+    })
 
     // it('should return a error with 422 code when the email field is invalid', async () => {
     //   const { email, ...signUpDtoWithoutEmail } = signUpDto
