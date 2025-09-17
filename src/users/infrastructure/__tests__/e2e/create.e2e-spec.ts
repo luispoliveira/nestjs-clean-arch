@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { applyGlobalConfig } from '@/global-config'
 import { DatabaseModule } from '@/shared/infrastructure/database/database.module'
 import { setupPrismaTests } from '@/shared/infrastructure/database/prisma/testing/setup-prisma-tests'
@@ -116,6 +117,15 @@ describe('UsersController e2e tests', () => {
         'password should not be empty',
         'password must be a string',
       ])
+    })
+
+    it('should return a error with 422 code with invalid field provided', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send(Object.assign(signUpDto, { xpto: 'fake' }))
+        .expect(422)
+      expect(res.body.error).toBe('Unprocessable Entity')
+      expect(res.body.message).toEqual(['property xpto should not exist'])
     })
   })
 })
