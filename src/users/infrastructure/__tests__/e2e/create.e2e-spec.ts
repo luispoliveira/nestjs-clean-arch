@@ -140,8 +140,11 @@ describe('UsersController e2e tests', () => {
         .post('/users')
         .send(signUpDto)
         .expect(409)
-
-      console.log(res.body)
+        .expect({
+          statusCode: 409,
+          error: 'Conflict',
+          message: 'User with email test@example.com already exists',
+        })
     })
   })
 })
