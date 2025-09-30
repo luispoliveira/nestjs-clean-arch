@@ -14,6 +14,12 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
+import {
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger'
 import { UserOutputDTO } from '../application/dtos/user-output.dto'
 import { DeleteUserUseCase } from '../application/usecases/delete-user.usecase'
 import { GetUserUseCase } from '../application/usecases/get-user.usecase'
@@ -30,6 +36,7 @@ import { UpdateUserDto } from './dtos/update-user.dto'
 import { UserCollectionPresenter } from './presenters/user-collection.presenter'
 import { UserPresenter } from './presenters/user.presenter'
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   @Inject(SignUpUseCase.UseCase)
@@ -77,6 +84,40 @@ export class UsersController {
     return this.authService.generateJwt(output.id)
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    schema: {
+      type: 'object',
+      properties: {
+        meta: {
+          type: 'object',
+          properties: {
+            total: { type: 'number', example: 100 },
+            currentPage: { type: 'number', example: 10 },
+            lastPage: { type: 'number', example: 10 },
+            perPage: { type: 'number', example: 10 },
+          },
+        },
+        data: {
+          type: 'array',
+          items: { $ref: getSchemaPath(UserPresenter) },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Validation Error',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @UseGuards(AuthGuard)
   @Get()
   async search(@Query() query: ListUsersDto) {
