@@ -71,12 +71,55 @@ export class UsersController {
     return new UserCollectionPresenter(output)
   }
 
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully created.',
+    schema: { $ref: getSchemaPath(UserPresenter) },
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Conflict Error',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Validation Error',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
+  @HttpCode(201)
   @Post()
   async create(@Body() signUpDto: SignUpDto) {
     const output = await this.signUpUseCase.execute(signUpDto)
     return UsersController.userToResponse(output)
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully authenticated.',
+    schema: {
+      type: 'object',
+      properties: {
+        accessToken: {
+          type: 'string',
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Validation Error',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @HttpCode(200)
   @Post('login')
   async signIn(@Body() signInDto: SignInDto) {
@@ -125,6 +168,24 @@ export class UsersController {
     return UsersController.listUsersToResponse(output)
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully retrieved.',
+    schema: { $ref: getSchemaPath(UserPresenter) },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User Not Found',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -132,6 +193,28 @@ export class UsersController {
     return UsersController.userToResponse(output)
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully updated.',
+    schema: { $ref: getSchemaPath(UserPresenter) },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User Not Found',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Validation Error',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @UseGuards(AuthGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -142,6 +225,28 @@ export class UsersController {
     return UsersController.userToResponse(output)
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'The user password has been successfully updated.',
+    schema: { $ref: getSchemaPath(UserPresenter) },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User Not Found',
+  })
+  @ApiResponse({
+    status: 422,
+    description: 'Validation Error',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @UseGuards(AuthGuard)
   @Patch(':id')
   async updatePassword(
@@ -155,6 +260,23 @@ export class UsersController {
     return UsersController.userToResponse(output)
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 204,
+    description: 'The user has been successfully deleted.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User Not Found',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @UseGuards(AuthGuard)
   @HttpCode(204)
   @Delete(':id')
