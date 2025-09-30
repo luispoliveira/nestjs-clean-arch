@@ -87,16 +87,60 @@ describe('UsersController e2e tests', () => {
       ])
     })
 
-    // it('should return a error with 404 code when the user is not found', async () => {
-    //   await request(app.getHttpServer())
-    //     .patch(`/users/fakeId`)
-    //     .send(updatePasswordDto)
-    //     .expect(404)
-    //     .expect({
-    //       statusCode: 404,
-    //       error: 'Not Found',
-    //       message: 'User with id fakeId not found',
-    //     })
-    // })
+    it('should return a error with 404 code when the user is not found', async () => {
+      await request(app.getHttpServer())
+        .patch(`/users/fakeId`)
+        .send(updatePasswordDto)
+        .expect(404)
+        .expect({
+          statusCode: 404,
+          error: 'Not Found',
+          message: 'User with id fakeId not found',
+        })
+    })
+
+    it('should return a error with 400 code when password field is missing', async () => {
+      const { password, ...updatePasswordDtoWithoutPassword } =
+        updatePasswordDto
+      await request(app.getHttpServer())
+        .patch(`/users/${entity.id}`)
+        .send({ ...updatePasswordDtoWithoutPassword })
+        .expect(422)
+        .expect(res => {
+          expect(res.body.error).toBe('Unprocessable Entity')
+          expect(res.body.message).toEqual([
+            'password should not be empty',
+            'password must be a string',
+          ])
+        })
+    })
+
+    it('should return a error with 400 code when the old password is missing', async () => {
+      const { oldPassword, ...updatePasswordDtoWithoutOldPassword } =
+        updatePasswordDto
+      await request(app.getHttpServer())
+        .patch(`/users/${entity.id}`)
+        .send({ ...updatePasswordDtoWithoutOldPassword })
+        .expect(422)
+        .expect(res => {
+          expect(res.body.error).toBe('Unprocessable Entity')
+          expect(res.body.message).toEqual([
+            'oldPassword should not be empty',
+            'oldPassword must be a string',
+          ])
+        })
+    })
+
+    it('should return a error with 400 code when the old password does not match', async () => {
+      await request(app.getHttpServer())
+        .patch(`/users/${entity.id}`)
+        .send({ ...updatePasswordDto, oldPassword: 'fakeOldPassword' })
+        .expect(422)
+        .expect({
+          statusCode: 422,
+          error: 'Unprocessable Entity',
+          message: 'Old password is incorrect.',
+        })
+    })
   })
 })
