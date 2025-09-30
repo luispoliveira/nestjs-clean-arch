@@ -1,5 +1,5 @@
 import { BadRequestError } from '@/shared/application/errors/bad-request-error'
-import { InvalidCredentials } from '@/shared/application/errors/invalid-credentials-error'
+import { InvalidCredentialsError } from '@/shared/application/errors/invalid-credentials-error'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { DatabaseModule } from '@/shared/infrastructure/database/database.module'
@@ -68,7 +68,7 @@ describe('SignInUsecase Integration Tests', () => {
 
     await expect(() =>
       sut.execute({ email: entity.email, password: 'wrong-password' }),
-    ).rejects.toThrow(new InvalidCredentials('Invalid email or password.'))
+    ).rejects.toThrow(new InvalidCredentialsError('Invalid email or password.'))
   })
 
   it('should throw error when email is empty', async () => {

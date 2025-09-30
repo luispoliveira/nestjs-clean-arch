@@ -128,4 +128,27 @@ describe('UsersController e2e tests', () => {
         error: 'Unprocessable Entity',
       })
   })
+
+  it('should return a 401 if password does not match', async () => {
+    const hashedPassword = await hashProvider.generateHash(signInDto.password)
+    const entity = new UserEntity({
+      ...UserDataBuilder({}),
+      email: signInDto.email,
+      password: hashedPassword,
+    })
+    await repository.insert(entity)
+
+    await request(app.getHttpServer())
+      .post('/users/login')
+      .send({
+        ...signInDto,
+        password: 'wrongPassword',
+      })
+      .expect(400)
+      .expect({
+        statusCode: 400,
+        message: 'Invalid email or password.',
+        error: 'Bad Request',
+      })
+  })
 })

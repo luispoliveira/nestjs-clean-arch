@@ -1,4 +1,4 @@
-import { InvalidCredentials } from '@/shared/application/errors/invalid-credentials-error'
+import { InvalidCredentialsError } from '@/shared/application/errors/invalid-credentials-error'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { UseCase as DefaultUseCase } from '@/shared/application/usecases/use-case'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
@@ -33,7 +33,7 @@ export namespace SignInUseCase {
       )
 
       if (!isValid) {
-        throw new InvalidCredentials('Invalid email or password.')
+        throw new InvalidCredentialsError('Invalid email or password.')
       }
 
       return UserOutputMapper.toOutput(user)

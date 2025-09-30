@@ -1,5 +1,5 @@
 import { BadRequestError } from '@/shared/application/errors/bad-request-error'
-import { InvalidCredentials } from '@/shared/application/errors/invalid-credentials-error'
+import { InvalidCredentialsError } from '@/shared/application/errors/invalid-credentials-error'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { UserEntity } from '@/users/domain/entities/user.entity'
@@ -73,6 +73,6 @@ describe('SignInUseCase unit test', () => {
         email: userEntity.email,
         password: 'wrong_password',
       }),
-    ).rejects.toThrow(InvalidCredentials)
+    ).rejects.toThrow(InvalidCredentialsError)
   })
 })
