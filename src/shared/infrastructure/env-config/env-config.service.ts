@@ -6,6 +6,13 @@ import { EnvConfig } from './env-config.interface'
 export class EnvConfigService implements EnvConfig {
   constructor(private _configService: ConfigService) {}
 
+  getJwtSecret(): string {
+    return this._configService.get<string>('JWT_SECRET') || 'default_secret'
+  }
+  getJwtExpiresInSeconds(): number {
+    return Number(this._configService.get<string>('JWT_EXPIRES_IN')) || 3600
+  }
+
   getAppPort(): number {
     return Number(this._configService.get<number>('PORT') || 3000)
   }
