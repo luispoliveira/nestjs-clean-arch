@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { applyGlobalConfig } from '@/global-config'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
@@ -23,6 +25,8 @@ describe('UsersController e2e tests', () => {
   const prismaService = new PrismaClient()
   let entity: UserEntity
   let hashProvider: HashProvider
+  let hashPassword: string
+  let accessToken: string
 
   beforeAll(async () => {
     setupPrismaTests()
@@ -38,6 +42,7 @@ describe('UsersController e2e tests', () => {
     await app.init()
     repository = module.get<UserRepository.Repository>('UserRepository')
     hashProvider = new BcryptjsHashProvider()
+    hashPassword = await hashProvider.generateHash('123456')
   })
 
   beforeEach(async () => {
@@ -52,12 +57,19 @@ describe('UsersController e2e tests', () => {
       }),
     )
     await repository.insert(entity)
+
+    const loginResponse = await request(app.getHttpServer())
+      .post('/users/login')
+      .send({ email: entity.email, password: 'oldPassword' })
+
+    accessToken = loginResponse.body.accessToken as string
   })
 
   describe('PATCH /users/:id', () => {
     it('should update a user password', async () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send(updatePasswordDto)
         .expect(200)
 
@@ -75,6 +87,7 @@ describe('UsersController e2e tests', () => {
     it('should return a error with 422 code when the request is invalid', async () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({})
         .expect(422)
 
@@ -90,6 +103,7 @@ describe('UsersController e2e tests', () => {
     it('should return a error with 404 code when the user is not found', async () => {
       await request(app.getHttpServer())
         .patch(`/users/fakeId`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send(updatePasswordDto)
         .expect(404)
         .expect({
@@ -104,6 +118,7 @@ describe('UsersController e2e tests', () => {
         updatePasswordDto
       await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ ...updatePasswordDtoWithoutPassword })
         .expect(422)
         .expect(res => {
@@ -120,6 +135,7 @@ describe('UsersController e2e tests', () => {
         updatePasswordDto
       await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ ...updatePasswordDtoWithoutOldPassword })
         .expect(422)
         .expect(res => {
@@ -134,12 +150,25 @@ describe('UsersController e2e tests', () => {
     it('should return a error with 400 code when the old password does not match', async () => {
       await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
         .send({ ...updatePasswordDto, oldPassword: 'fakeOldPassword' })
         .expect(422)
         .expect({
           statusCode: 422,
           error: 'Unprocessable Entity',
           message: 'Old password is incorrect.',
+        })
+    })
+
+    it('should return 401 when no token is provided', async () => {
+      await request(app.getHttpServer())
+        .patch(`/users/${entity.id}`)
+        .send(updatePasswordDto)
+        .expect(401)
+        .expect({
+          statusCode: 401,
+          error: 'Unauthorized',
+          message: 'No token provided',
         })
     })
   })
