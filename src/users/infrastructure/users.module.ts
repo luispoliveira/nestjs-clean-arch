@@ -1,3 +1,4 @@
+import { AuthModule } from '@/auth/infrastructure/auth.module'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
 import { Module } from '@nestjs/common'
@@ -14,6 +15,7 @@ import { BcryptjsHashProvider } from './providers/hash-provider/bcryptjs-hash.pr
 import { UsersController } from './users.controller'
 
 @Module({
+  imports: [AuthModule],
   controllers: [UsersController],
   providers: [
     {
