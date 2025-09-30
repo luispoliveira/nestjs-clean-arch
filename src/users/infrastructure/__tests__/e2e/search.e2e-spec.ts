@@ -69,11 +69,9 @@ describe('UsersController e2e tests', () => {
 
       expect(Object.keys(res.body)).toStrictEqual(['data', 'meta'])
       expect(res.body).toStrictEqual({
-        data: [...entities]
-          .reverse()
-          .map(item =>
-            instanceToPlain(UsersController.userToResponse(item as any)),
-          ),
+        data: [...entities].map(item =>
+          instanceToPlain(UsersController.userToResponse(item as any)),
+        ),
         meta: {
           currentPage: 1,
           perPage: 15,
