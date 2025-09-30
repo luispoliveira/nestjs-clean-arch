@@ -67,8 +67,6 @@ describe('UsersController e2e tests', () => {
         .get(`/users?${queryParams}`)
         .expect(200)
 
-      console.log('🚀 ~ res:', res.body)
-
       expect(Object.keys(res.body)).toStrictEqual(['data', 'meta'])
       expect(res.body).toStrictEqual({
         data: [...entities]
@@ -83,11 +81,15 @@ describe('UsersController e2e tests', () => {
           lastPage: 1,
         },
       })
-      // const user = await repository.findById(entity.id)
-      // const presenter = UsersController.userToResponse(user.toJSON())
-      // const serialized = instanceToPlain(presenter)
+    })
 
-      // expect(res.body.data).toEqual(serialized)
+    it('should return a error with 422 code when the query params is invalid', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/users?fakeId=10`)
+        .expect(422)
+
+      expect(res.body.error).toBe('Unprocessable Entity')
+      expect(res.body.message).toEqual(['property fakeId should not exist'])
     })
   })
 })
