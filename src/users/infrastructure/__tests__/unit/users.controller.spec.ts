@@ -1,6 +1,5 @@
 import { UserOutputDTO } from '@/users/application/dtos/user-output.dto'
 import { ListUsersUseCase } from '@/users/application/usecases/list-users.usecase'
-import { SignInUseCase } from '@/users/application/usecases/sign-in.usecase'
 import { SignUpUseCase } from '@/users/application/usecases/sign-up.usecase'
 import { v4 as uuidv4 } from 'uuid'
 import { ListUsersDto } from '../../dtos/list-users.dto'
@@ -52,20 +51,23 @@ describe('UsersController unit tests', () => {
   })
 
   it('should sign in a user', async () => {
-    const output: SignInUseCase.Output = props
+    const output = 'fake_token'
     const mockSignInUseCase = {
       execute: jest.fn().mockResolvedValue(output),
     }
 
+    const mockAuthService = {
+      generateJwt: jest.fn().mockReturnValue(Promise.resolve(output)),
+    }
     sut['signInUseCase'] = mockSignInUseCase as any
+    sut['authService'] = mockAuthService as any
 
     const input: SignInDto = {
       email: props.email,
       password: props.password,
     }
-    const presenter = await sut.signIn(input)
-    expect(presenter).toBeInstanceOf(UserPresenter)
-    expect(presenter).toStrictEqual(new UserPresenter(output))
+    const result = await sut.signIn(input)
+    expect(result).toEqual(output)
     expect(mockSignInUseCase.execute).toHaveBeenCalledWith(input)
   })
 
