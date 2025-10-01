@@ -1,0 +1,49 @@
+name: CI - Integration and E2E Tests
+
+on: [pull_request]
+
+jobs:
+  run-int-e2e-tests:
+    name: Run Integration and E2E Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: mydb
+        options: >-
+          --health-cmd="pg_isready -U user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "yarn"
+      - run: yarn install --frozen-lockfile
+      - run: yarn prisma generate
+        env:
+          DATABASE_URL: "postgres://user:password@localhost:5432/mydb?schema=public"
+      - run: yarn prisma migrate deploy
+        env:
+          DATABASE_URL: "postgres://user:password@localhost:5432/mydb?schema=public"
+      - run: yarn test:int
+        env:
+          PORT: 3000
+          NODE_ENV: test
+          JWT_SECRET: fake_secret
+          JWT_EXPIRES_IN: 86400
+          DATABASE_URL: "postgres://user:password@localhost:5432/mydb?schema=public"
+      - run: yarn test:e2e
+        env:
+          PORT: 3000
+          NODE_ENV: test
+          JWT_SECRET: fake_secret
+          JWT_EXPIRES_IN: 86400
+          DATABASE_URL: "postgres://user:password@localhost:5432/mydb?schema=public"
