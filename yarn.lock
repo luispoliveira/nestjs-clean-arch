@@ -407,10 +407,10 @@
     ajv-formats "^3.0.1"
     fast-uri "^3.0.0"
 
-"@fastify/cors@11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@fastify/cors/-/cors-11.1.0.tgz#09f79748f08f147d19cfc3f1807b59791bc77cf0"
-  integrity sha512-sUw8ed8wP2SouWZTIbA7V2OQtMNpLj2W6qJOYhNdcmINTu6gsxVYXjQiM9mdi8UUDlcoDDJ/W2syPo1WB2QjYA==
+"@fastify/cors@11.2.0":
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/@fastify/cors/-/cors-11.2.0.tgz#82c47aff9bd7dfd40ac0a66fcd87a034113dcdd8"
+  integrity sha512-LbLHBuSAdGdSFZYTLVA3+Ch2t+sA6nq3Ejc6XLAKiQ6ViS2qFnvicpj0htsx03FyYeLs04HfRNBsz/a8SvbcUw==
   dependencies:
     fastify-plugin "^5.0.0"
     toad-cache "^3.7.0"
@@ -1153,18 +1153,18 @@
     path-to-regexp "8.2.0"
     tslib "2.8.1"
 
-"@nestjs/platform-fastify@^11.1.5":
-  version "11.1.6"
-  resolved "https://registry.yarnpkg.com/@nestjs/platform-fastify/-/platform-fastify-11.1.6.tgz#22524df44cad32012858566f1b3bb627ce2788f8"
-  integrity sha512-udnIg7vfA103wppRkcMRVWX71S7NfeDnlprTndhcZzYXcDY2i5c+RwrQN/xU4Aw5X22Fg8ryi7bFbn6/Lquv8w==
+"@nestjs/platform-fastify@^11.1.10":
+  version "11.1.10"
+  resolved "https://registry.yarnpkg.com/@nestjs/platform-fastify/-/platform-fastify-11.1.10.tgz#c9f9347f9496783b6895aa6c63f27cf942b70ec9"
+  integrity sha512-9k26jaDZkq42SaH5/cCsPShd6XeCAuGFF8U63n2lQJwOA8nBmIIGjWy1RDFy+8qFVW0C0DaDdbUPQR5aL274fw==
   dependencies:
-    "@fastify/cors" "11.1.0"
+    "@fastify/cors" "11.2.0"
     "@fastify/formbody" "8.0.2"
     "@fastify/middie" "9.0.3"
     fast-querystring "1.1.2"
-    fastify "5.4.0"
+    fastify "5.6.2"
     light-my-request "6.6.0"
-    path-to-regexp "8.2.0"
+    path-to-regexp "8.3.0"
     tslib "2.8.1"
 
 "@nestjs/schematics@^11.0.1", "@nestjs/schematics@^11.0.6":
@@ -1236,6 +1236,11 @@
   integrity sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==
   dependencies:
     "@noble/hashes" "^1.1.5"
+
+"@pinojs/redact@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@pinojs/redact/-/redact-0.4.0.tgz#c3de060dd12640dcc838516aa2a6803cc7b2e9d6"
+  integrity sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg==
 
 "@pkgr/core@^0.2.9":
   version "0.2.9"
@@ -3377,11 +3382,6 @@ fast-querystring@1.1.2, fast-querystring@^1.0.0, fast-querystring@^1.1.2:
   dependencies:
     fast-decode-uri-component "^1.0.1"
 
-fast-redact@^3.1.1:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/fast-redact/-/fast-redact-3.5.0.tgz#e9ea02f7e57d0cd8438180083e93077e496285e4"
-  integrity sha512-dwsoQlS7h9hMeYUq1W++23NDcBLV4KqONnITDV9DjfS3q1SgDGVrBdvvTLUotWtPSD7asWDV9/CmsZPy8Hf70A==
-
 fast-safe-stringify@2.1.1, fast-safe-stringify@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz#c406a83b6e70d9e35ce3b30a81141df30aeba884"
@@ -3443,10 +3443,10 @@ fastify-swagger@^5.2.0:
     fastify-swagger-deprecated "npm:fastify-swagger@5.1.1"
     process-warning "^1.0.0"
 
-fastify@5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-5.4.0.tgz#82bf56e0bc36ba8dfb0bd372a0de8b62ccf3287c"
-  integrity sha512-I4dVlUe+WNQAhKSyv15w+dwUh2EPiEl4X2lGYMmNSgF83WzTMAPKGdWEv5tPsCQOb+SOZwz8Vlta2vF+OeDgRw==
+fastify@5.6.2:
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-5.6.2.tgz#e9bd80c869f54440f62f539d646b1c303b56c40f"
+  integrity sha512-dPugdGnsvYkBlENLhCgX8yhyGCsCPrpA8lFWbTNU428l+YOnLgYHR69hzV8HWPC79n536EqzqQtvhtdaCE0dKg==
   dependencies:
     "@fastify/ajv-compiler" "^4.0.0"
     "@fastify/error" "^4.0.0"
@@ -3457,7 +3457,7 @@ fastify@5.4.0:
     fast-json-stringify "^6.0.0"
     find-my-way "^9.0.0"
     light-my-request "^6.0.0"
-    pino "^9.0.0"
+    pino "^10.1.0"
     process-warning "^5.0.0"
     rfdc "^1.3.1"
     secure-json-parse "^4.0.0"
@@ -5209,7 +5209,7 @@ path-to-regexp@8.2.0:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-8.2.0.tgz#73990cc29e57a3ff2a0d914095156df5db79e8b4"
   integrity sha512-TdrF7fW9Rphjq4RjrW0Kp2AW0Ahwu9sRGTkS6bvDi0SCwZlEZYmcfDbEsTz8RVk0EHIS/Vd1bv3JhG+1xZuAyQ==
 
-path-to-regexp@^8.0.0, path-to-regexp@^8.1.0:
+path-to-regexp@8.3.0, path-to-regexp@^8.0.0, path-to-regexp@^8.1.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-8.3.0.tgz#aa818a6981f99321003a08987d3cec9c3474cd1f"
   integrity sha512-7jdwVIRtsP8MYpdXSwOS0YdD0Du+qOoF/AEPIt88PcCFrZCzx41oxku1jD88hZBwbNUIEfpqvuhjFaMAqMTWnA==
@@ -5266,13 +5266,13 @@ pino-std-serializers@^7.0.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-7.0.0.tgz#7c625038b13718dbbd84ab446bd673dc52259e3b"
   integrity sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==
 
-pino@^9.0.0:
-  version "9.9.5"
-  resolved "https://registry.yarnpkg.com/pino/-/pino-9.9.5.tgz#f06a5a0b4c715e34606290070dbb938c27eddd8b"
-  integrity sha512-d1s98p8/4TfYhsJ09r/Azt30aYELRi6NNnZtEbqFw6BoGsdPVf5lKNK3kUwH8BmJJfpTLNuicjUQjaMbd93dVg==
+pino@^10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/pino/-/pino-10.1.0.tgz#eb2a8a5b509fe4c75643ccec30461ea24766003a"
+  integrity sha512-0zZC2ygfdqvqK8zJIr1e+wT1T/L+LF6qvqvbzEQ6tiMAoTqEVK9a1K3YRu8HEUvGEvNqZyPJTtb2sNIoTkB83w==
   dependencies:
+    "@pinojs/redact" "^0.4.0"
     atomic-sleep "^1.0.0"
-    fast-redact "^3.1.1"
     on-exit-leak-free "^2.1.0"
     pino-abstract-transport "^2.0.0"
     pino-std-serializers "^7.0.0"
